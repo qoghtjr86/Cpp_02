@@ -1,121 +1,129 @@
 #include <iostream>
 using namespace std;
 
-struct client
+struct Account
 {
-    int account_num = 0;
+    int acc_ID = 0;
     char name[30] = "";
     int charges = 0;
 };
 
-client Create()
+Account arr[100] = {};
+int num = 0;
+
+enum {ERROR, CREATE, DEPOSIT, WITHDRAW, SHOWINFO, EXIT};
+
+void ShowMenu()
 {
-    client a;
+    cout<<"-----Menu------"<<endl;
+    cout<<"1. 계좌개설"<<endl;
+    cout<<"2. 입 금"<<endl;
+    cout<<"3. 출 금"<<endl;
+    cout<<"4. 계좌정보 전체 출력"<<endl;
+    cout<<"5. 프로그램 종료"<<endl;
+}
+
+void Create()
+{
+    Account a;
     cout<<"[계좌개설]"<<endl;
-    cout<<"계좌ID: ";
-    cin>>a.account_num;
-    cout<<"이 름: ";
-    cin>>a.name;
-    cout<<"입금액: ";
-    cin>>a.charges;
+    cout<<"계좌ID: ";cin>>a.acc_ID;
+    cout<<"이 름: ";cin>>a.name;
+    cout<<"입금액: ";cin>>a.charges;
     cout<<"입금완료"<<endl;
-    return a;
+    arr[num] = a;
+    num++;
 }
 
-void Add(client arr[], int idx)
+void Deposit()
 {
-    int money;
-    cout<<"입금액: ";
-    cin>>money;
-    arr[idx].charges += money;
-    cout<<"입금완료"<<endl;
-}
-
-void Take(client arr[], int idx)
-{
-    int money;
-    cout<<"출금액: ";
-    cin>>money;
-    arr[idx].charges -= money;
-    cout<<"출금완료"<<endl;
-}
-
-void Info(client arr[])
-{
+    int ID;
+    cout<<"계좌ID: ";cin>>ID;
     for(int i=0; i<10; i++)
-        if(arr[i].account_num != 0)
+        if(arr[i].acc_ID == ID)
         {
-            cout<<"계좌ID: "<<arr[i].account_num<<endl;
+            int money;
+            cout<<"입금액: ";cin>>money;
+            arr[i].charges += money;
+            cout<<"입금완료"<<endl;
+            break;
+        }
+        else
+        {
+            continue;
+        }
+}
+
+void WithDraw()
+{
+    int ID;
+    cout<<"계좌ID: ";cin>>ID;
+    for(int i=0; i<10; i++)
+        if(arr[i].acc_ID == ID)
+        {
+            int money;
+            cout<<"출금액: ";cin>>money;
+            arr[i].charges -= money;
+            cout<<"출금완료"<<endl;
+            break;
+        }
+        else
+        {
+            continue;
+        }
+}
+
+void ShowInfo()
+{
+    cout<<endl<<"[전체 계좌정보]"<<endl;
+    for(int i=0; i<10; i++)
+        if(arr[i].acc_ID != 0)
+        {
+            cout<<"계좌ID: "<<arr[i].acc_ID<<endl;
             cout<<"이 름: "<<arr[i].name<<endl;
             cout<<"잔 액: "<<arr[i].charges<<endl;
+            cout<<endl;
         }
         else
             break;
 }
 
+void Exit()
+{
+    cout<<"프로그램을 종료합니다."<<endl;
+}
+
+void Error()
+{
+    cout<<"잘못 입력하셨습니다."<<endl;
+}
+
 int main()
 {
-    client arr[10] = {};
-    int sel = 0;
-    
-    while(sel != 5)
+    int select = 0;
+    while(select != 5)
     {
-        cout<<"-----Menu------"<<endl;
-        cout<<"1. 계좌개설"<<endl;
-        cout<<"2. 입 금"<<endl;
-        cout<<"3. 출 금"<<endl;
-        cout<<"4. 계좌정보 전체 출력"<<endl;
-        cout<<"5. 프로그램 종료"<<endl;
-        cout<<"선택: ";
-        cin>>sel;
-        switch (sel) {
-            case 1:
-                {
-                cout<<"계좌를 개설합니다."<<endl;
-                for(int i=0; i<10; i++)
-                    if(arr[i].account_num == 0)
-                    {
-                        arr[i] = Create();
-                        break;
-                    }
-                    else
-                        continue;
-                }
+        ShowMenu();
+        cout<<"선택: ";cin>>select;
+        switch (select) {
+            case CREATE:
+                Create();
                 break;
-            case 2:
-                {
-                cout<<"입금 화면입니다."<<endl;
-                cout<<"계좌ID: ";
-                int id;
-                cin>>id;
-                for(int i=0; i<10; i++)
-                    if(arr[i].account_num == id)
-                        Add(arr, i);
-                }
+            case DEPOSIT:
+                Deposit();
                 break;
-            case 3:
-                {
-                cout<<"출금 화면입니다."<<endl;
-                cout<<"계좌ID: ";
-                int id;
-                cin>>id;
-                for(int i=0; i<10; i++)
-                    if(arr[i].account_num == id)
-                        Take(arr, i);
-                }
+            case WITHDRAW:
+                WithDraw();
                 break;
-            case 4:
-                {
-                cout<<"전체 계좌정보입니다."<<endl;
-                Info(arr);
-                }
+            case SHOWINFO:
+                ShowInfo();
                 break;
-            case 5:
-                cout<<"프로그램을 종료합니다."<<endl;
+            case EXIT:
+                Exit();
                 break;
             default:
+                Error();
                 break;
         }
     }
-    
 }
