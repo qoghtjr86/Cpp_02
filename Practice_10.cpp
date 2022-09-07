@@ -7,7 +7,7 @@ struct Point
     int ypos;
 };
 
-Point& PntAdder(Point &p1, Point &p2)
+Point& PntAdder(const Point &p1, const Point &p2)
 {
     Point *tmp=new Point;
     
