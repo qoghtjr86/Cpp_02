@@ -22,7 +22,7 @@ public:
         myMoney+=money;
         return num;
     }
-    void ShowSalesResult()
+    void ShowSalesResult() const
     {
         cout<<"남은 사과: "<<numOfApples<<endl;
         cout<<"판매 수익: "<<myMoney<<endl<<endl;
@@ -42,10 +42,17 @@ public:
     }
     void BuyApples(FruitSeller &seller, int money)
     {
-        numOfApples+=seller.SalesApples(money);
-        myMoney-=money;
+        if(money<0)
+        {
+            cout<<"사과의 구매를 목적으로 0보다 작은 수를 전달할 수 없습니다."<<endl;
+        }
+        else
+        {
+            numOfApples+=seller.SalesApples(money);
+            myMoney-=money;
+        }
     }
-    void ShowBuyResult()
+    void ShowBuyResult() const
     {
         cout<<"현재 잔액: "<<myMoney<<endl;
         cout<<"사과 개수: "<<numOfApples<<endl<<endl;
