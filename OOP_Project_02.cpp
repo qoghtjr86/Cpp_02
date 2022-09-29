@@ -29,13 +29,13 @@ public:
         cout<<"5. 프로그램 종료"<<endl;
     }
     
-    void Create(Account* arr)
+    void Create(Account* arr, int& count)
     {
-        char name=NULL;
+        char name[20]="";
         cout<<"[계좌개설]"<<endl;
         cout<<"계좌ID: ";cin>>acc_ID;
         cout<<"이 름: ";cin>>name;
-        char* pstr = &name;
+        char* pstr = name;
         len=strlen(pstr)+1;
         Name=new char[len];
         strcpy(Name, pstr);
@@ -50,6 +50,7 @@ public:
         int ID;
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
+        {
             if(arr[i].acc_ID == ID)
             {
                 int money;
@@ -62,6 +63,7 @@ public:
             {
                 continue;
             }
+        }
     }
     
     void WithDraw(Account* arr)
@@ -69,6 +71,7 @@ public:
         int ID;
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
+        {
             if(arr[i].acc_ID == ID)
             {
                 int money;
@@ -81,12 +84,14 @@ public:
             {
                 continue;
             }
+        }
     }
   
     void ShowInfo(Account* arr)
     {
         cout<<endl<<"[전체 계좌정보]"<<endl;
         for(int i=0; i<10; i++)
+        {
             if(arr[i].acc_ID != 0)
             {
                 cout<<"계좌ID: "<<arr[i].acc_ID<<endl;
@@ -96,11 +101,23 @@ public:
             }
             else
                 break;
+        }
     }
     
-    void Exit()
+    void Exit(Account* arr)
     {
-        cout<<"프로그램을 종료합니다."<<endl;
+        for(int i=0; i<10; i++)
+        {
+            if(arr[i].acc_ID != 0)
+            {
+                delete []arr[i].Name;
+            }
+            else
+            {
+                cout<<"프로그램을 종료합니다."<<endl;
+                break;
+            }
+        }
     }
 
     void Error()
@@ -112,6 +129,8 @@ public:
 int main()
 {
     Account* arr[10];
+    int count=0;
+    int* ptr=&count;
     int select=0;
     while(select!=5)
     {
@@ -121,7 +140,7 @@ int main()
         switch (select) {
             case CREATE:
             {
-                a.Create(*arr);
+                a.Create(*arr, *ptr);
                 break;
             }
             case DEPOSIT:
@@ -141,7 +160,7 @@ int main()
             }
             case EXIT:
             {
-                a.Exit();
+                a.Exit(*arr);
                 break;
             }
             default:
