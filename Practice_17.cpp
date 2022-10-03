@@ -31,6 +31,23 @@ public:
         pNum=new char[len3];
         strcpy(pNum, pnum);
     }
+    NameCard(NameCard& copy)
+    {
+        size_t len=strlen(copy.Name)+1;
+        Name=new char[len];
+        strcpy(Name, copy.Name);
+        
+        size_t len2=strlen(copy.cName)+1;
+        cName=new char[len2];
+        strcpy(cName, copy.cName);
+        
+        size_t len3=strlen(copy.pNum)+1;
+        pNum=new char[len3];
+        strcpy(pNum, copy.pNum);
+        
+        Rank=copy.Rank;
+    }
+    
     void rank_func(int rank)
     {
             switch (rank)
@@ -75,10 +92,10 @@ public:
 int main(void)
 {
     NameCard manClerk("Lee", "ABCEng", "010-1111-2222", COMP_POS::CLERK);
+    NameCard copy1=manClerk;
     NameCard manSenior("Hong", "OrangeEng", "010-3333-4444", COMP_POS::SENIOR);
-    NameCard manAssist("Kim", "SoGoodComp", "010-5555-6666", COMP_POS::ASSIST);
-    manClerk.ShowNameCardInfo();
-    manSenior.ShowNameCardInfo();
-    manAssist.ShowNameCardInfo();
+    NameCard copy2=manSenior;
+    copy1.ShowNameCardInfo();
+    copy2.ShowNameCardInfo();
     return 0;
 }
