@@ -13,6 +13,8 @@ private:
     size_t len;
 
 public:
+    static Account arr[10];
+    static int cnt;
     Account()
     : acc_ID(0), Name(NULL), Charges(0), len(0)
     {
@@ -36,7 +38,7 @@ public:
         cout<<"5. 프로그램 종료"<<endl;
     }
     
-    void Create(Account* arr, int& count)
+    void Create()
     {
         char name[20]="";
         cout<<"[계좌개설]"<<endl;
@@ -48,21 +50,21 @@ public:
         strcpy(Name, pstr);
         cout<<"입금액: ";cin>>Charges;
         cout<<"입금완료"<<endl;
-        arr[count]=*this;
-        count++;
+        Account::arr[cnt]=*this;
+        cnt++;
     }
     
-    void Deposit(Account* arr)
+    void Deposit()
     {
         int ID;
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].acc_ID == ID)
+            if(Account::arr[i].acc_ID == ID)
             {
                 int money;
                 cout<<"입금액: ";cin>>money;
-                arr[i].Charges += money;
+                Account::arr[i].Charges += money;
                 cout<<"입금완료"<<endl;
                 break;
             }
@@ -73,17 +75,17 @@ public:
         }
     }
     
-    void WithDraw(Account* arr)
+    void WithDraw()
     {
         int ID;
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].acc_ID == ID)
+            if(Account::arr[i].acc_ID == ID)
             {
                 int money;
                 cout<<"출금액: ";cin>>money;
-                arr[i].Charges -= money;
+                Account::arr[i].Charges -= money;
                 cout<<"출금완료"<<endl;
                 break;
             }
@@ -94,16 +96,16 @@ public:
         }
     }
   
-    void ShowInfo(Account* arr) const
+    void ShowInfo() const
     {
         cout<<endl<<"[전체 계좌정보]"<<endl;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].Name != NULL)
+            if(Account::arr[i].Name != NULL)
             {
-                cout<<"계좌ID: "<<arr[i].acc_ID<<endl;
-                cout<<"이 름: "<<arr[i].Name<<endl;
-                cout<<"잔 액: "<<arr[i].Charges<<endl;
+                cout<<"계좌ID: "<<Account::arr[i].acc_ID<<endl;
+                cout<<"이 름: "<<Account::arr[i].Name<<endl;
+                cout<<"잔 액: "<<Account::arr[i].Charges<<endl;
                 cout<<endl;
                 continue;
             }
@@ -112,13 +114,13 @@ public:
         }
     }
     
-    void Exit(Account* arr)
+    void Exit()
     {
         for(int i=0; i<10; i++)
         {
-            if(arr[i].acc_ID != 0)
+            if(Account::arr[i].acc_ID != 0)
             {
-                delete []arr[i].Name;
+                delete []Account::arr[i].Name;
             }
             else
             {
@@ -133,13 +135,11 @@ public:
         cout<<"잘못 입력하셨습니다."<<endl;
     }
 };
-
+Account Account::arr[10]={};
+int Account::cnt=0;
 
 int main()
 {
-    Account* arr[10];
-    int count=0;
-    int* ptr=&count;
     int select=0;
     while(select!=5)
     {
@@ -149,27 +149,27 @@ int main()
         switch (select) {
             case CREATE:
             {
-                a.Create(*arr, *ptr);
+                a.Create();
                 break;
             }
             case DEPOSIT:
             {
-                a.Deposit(*arr);
+                a.Deposit();
                 break;
             }
             case WITHDRAW:
             {
-                a.WithDraw(*arr);
+                a.WithDraw();
                 break;
             }
             case SHOWINFO:
             {
-                a.ShowInfo(*arr);
+                a.ShowInfo();
                 break;
             }
             case EXIT:
             {
-                a.Exit(*arr);
+                a.Exit();
                 break;
             }
             default:
