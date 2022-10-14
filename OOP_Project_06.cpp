@@ -4,27 +4,32 @@ using namespace std;
 
 enum {ERROR, CREATE, DEPOSIT, WITHDRAW, SHOWINFO, EXIT};
 
+enum { NONE, RANK_A, RANK_B, RANK_C };
+
 class Account
 {
 private:
     int acc_ID;
     char* Name;
     int Charges;
-    size_t len;
     
 public:
-    static Account arr[10];
-    static int cnt;
     Account()
-    : acc_ID(0), Name(NULL), Charges(0), len(0)
+    : acc_ID(0), Name(NULL), Charges(0)
+    { }
+    
+    Account(int id, const char* name, int charges)
+    : acc_ID(id), Charges(charges)
     {
-        
+        size_t len=strlen(name)+1;
+        Name=new char[len];
+        strcpy(Name, name);
     }
     
     Account(Account& copy)
     :acc_ID(copy.acc_ID), Charges(copy.Charges)
     {
-        len=strlen(copy.Name)+1;
+        size_t len=strlen(copy.Name)+1;
         Name=new char[len];
         strcpy(Name, copy.Name);
     }
@@ -34,47 +39,39 @@ public:
     int GetAcc_ID() const { return acc_ID; }
     char* GetName() const { return Name; }
     int GetCharges() const { return Charges; }
+    virtual void SetRate(int per) { }
+    virtual void SetRank(int init) { }
+    virtual int GetRate() const { return 0; }
+    virtual int GetRank() const { return 0; }
 };
-Account Account::arr[10]={};
-int Account::cnt=0;
+
 
 class NormalAccount: public Account
 {
 private:
-    static int rate;
+    int rate;
 public:
-    NormalAccount()
-        : Account()
+    NormalAccount(int id, const char* name, int charges, int per)
+        : Account(id, name, charges), rate(per)
     { }
-    void SetRate(int per) { rate=per; }
-    int GetRate() const { return rate; }
-    void CreateNormal()
-    {
-        int id=0;
-        char name[20]="";
-        int charges=0;
-        int per=0;
-        cout<<"[보통예금계좌 개설]"<<endl;
-        cout<<"계좌ID: ";cin>>id;SetAcc_ID(id);
-        cout<<"이 름: ";cin>>name;SetName(name);
-        cout<<"입금액: ";cin>>charges;SetCharges(charges);
-        cout<<"이자율: ";cin>>per;SetRate(per);
-        cout<<"입금완료"<<endl;
-        arr[cnt]=*this;
-        cnt++;
-    }
+    virtual void SetRate(int per) { rate=per; }
+    virtual void SetRank(int init) { }
+    virtual int GetRate() const { return rate; }
+    virtual int GetRank() const { return 0; }
+
 };
-int NormalAccount::rate=0;
+
 
 class HighCreditAccount: public NormalAccount
 {
 private:
-    static int rank;
+    int rank;
 public:
-    HighCreditAccount()
-    : NormalAccount()
+    HighCreditAccount(int id, const char* name, int charges, int per, int init)
+    : NormalAccount(id, name, charges, per), rank(init)
     { }
-    void SetRank(int init)
+    
+    virtual void SetRank(int init)
     {
         if(init==1)
             rank=7;
@@ -83,31 +80,19 @@ public:
         else
             rank=2;
     }
-    int GetRank() const { return rank; }
-    void CreateCredit()
-    {
-        int id=0;
-        char name[20]="";
-        int charges=0;
-        int num=0;
-        int init=0;
-        cout<<"[신용신뢰계좌 개설]"<<endl;
-        cout<<"계좌ID: ";cin>>id;SetAcc_ID(id);
-        cout<<"이 름: ";cin>>name;SetName(name);
-        cout<<"입금액: ";cin>>charges;SetCharges(charges);
-        cout<<"이자율: ";cin>>num;SetRate(num);
-        cout<<"신용등급(1toA, 2toB, 3toC): ";cin>>init;SetRank(init);
-        cout<<"입금완료"<<endl;
-        arr[cnt]=*this;
-        cnt++;
-    }
-};
-int HighCreditAccount::rank=0;
+    virtual int GetRank() const { return rank; }
 
-class AccountHandler : public HighCreditAccount
+};
+
+class AccountHandler
 {
 public:
-
+    Account* arr[10];
+    int cnt;
+    AccountHandler()
+        : cnt(0)
+    { }
+    
     void ShowMenu() const
     {
         cout<<"-----Menu------"<<endl;
@@ -123,22 +108,69 @@ public:
         cout<<"1.보통예금계좌 2.신용신뢰계좌"<<endl;
     }
     
+    void CreateNormal()
+    {
+        int id=0;
+        char name[20]="";
+        int charges=0;
+        int per=0;
+        cout<<"[보통예금계좌 개설]"<<endl;
+        cout<<"계좌ID: ";cin>>id;
+        cout<<"이 름: ";cin>>name;
+        cout<<"입금액: ";cin>>charges;
+        cout<<"이자율: ";cin>>per;
+        arr[cnt++]=new NormalAccount(id, name, charges, per);
+        cout<<"입금완료"<<endl;
+
+    }
+    
+    void CreateCredit()
+    {
+        int id=0;
+        char name[20]="";
+        int charges=0;
+        int per=0;
+        int init=0;
+        cout<<"[신용신뢰계좌 개설]"<<endl;
+        cout<<"계좌ID: ";cin>>id;
+        cout<<"이 름: ";cin>>name;
+        cout<<"입금액: ";cin>>charges;
+        cout<<"이자율: ";cin>>per;
+        cout<<"신용등급(1toA, 2toB, 3toC): ";cin>>init;
+        switch (init)
+        {
+            case RANK_A:
+                arr[cnt++]=new HighCreditAccount(id, name, charges, per, RANK_A);
+                break;
+            case RANK_B:
+                arr[cnt++]=new HighCreditAccount(id, name, charges, per, RANK_B);
+                break;
+            case RANK_C:
+                arr[cnt++]=new HighCreditAccount(id, name, charges, per, RANK_C);
+                break;
+            default:
+                break;
+        }
+        cout<<"입금완료"<<endl;
+
+    }
+    
     void Deposit()
     {
         int ID;
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].GetAcc_ID() == ID)
+            if(arr[i]->GetAcc_ID() == ID)
             {
                 int money=0;
                 int result=0;
                 cout<<"입금액: ";cin>>money;
-                if(GetRank()!=0)
-                    result=(money/100)*(GetRate()+GetRank())+money+arr[i].GetCharges();
+                if(arr[i]->GetRank()!=0)
+                    result=(money/100)*(arr[i]->GetRate()+arr[i]->GetRank())+money+arr[i]->GetCharges();
                 else
-                    result=(money/100)*GetRate()+money+arr[i].GetCharges();
-                arr[i].SetCharges(result);
+                    result=(money/100)*arr[i]->GetRate()+money+arr[i]->GetCharges();
+                arr[i]->SetCharges(result);
                 cout<<"입금완료"<<endl;
                 break;
             }
@@ -155,13 +187,13 @@ public:
         cout<<"계좌ID: ";cin>>ID;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].GetAcc_ID() == ID)
+            if(arr[i]->GetAcc_ID() == ID)
             {
                 int money=0;
                 int result=0;
                 cout<<"출금액: ";cin>>money;
-                result=arr[i].GetCharges()-money;
-                arr[i].SetCharges(result);
+                result=arr[i]->GetCharges()-money;
+                arr[i]->SetCharges(result);
                 cout<<"출금완료"<<endl;
                 break;
             }
@@ -177,11 +209,11 @@ public:
         cout<<endl<<"[전체 계좌정보]"<<endl;
         for(int i=0; i<10; i++)
         {
-            if(arr[i].GetName() != nullptr)
+            if(arr[i]->GetName() != nullptr)
             {
-                cout<<"계좌ID: "<<arr[i].GetAcc_ID()<<endl;
-                cout<<"이 름: "<<arr[i].GetName()<<endl;
-                cout<<"잔 액: "<<arr[i].GetCharges()<<endl;
+                cout<<"계좌ID: "<<arr[i]->GetAcc_ID()<<endl;
+                cout<<"이 름: "<<arr[i]->GetName()<<endl;
+                cout<<"잔 액: "<<arr[i]->GetCharges()<<endl;
                 cout<<endl;
                 continue;
             }
@@ -194,8 +226,8 @@ public:
     {
         for(int i=0; i<10; i++)
         {
-            if(arr[i].GetAcc_ID()!=0)
-                delete []arr[i].GetName();
+            if(arr[i]->GetAcc_ID()!=0)
+                delete []arr[i]->GetName();
             else
                 break;
         }
