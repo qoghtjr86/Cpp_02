@@ -3,8 +3,7 @@
 using namespace std;
 
 enum {ERROR, CREATE, DEPOSIT, WITHDRAW, SHOWINFO, EXIT};
-
-enum { NONE, RANK_A, RANK_B, RANK_C };
+enum {NONE, RANK_A, RANK_B, RANK_C};
 
 class Account
 {
@@ -14,35 +13,26 @@ private:
     int Charges;
     
 public:
-    Account()
-    : acc_ID(0), Name(NULL), Charges(0)
-    { }
+    Account():acc_ID(0), Name(NULL), Charges(0){}
     
-    Account(int id, const char* name, int charges)
-    : acc_ID(id), Charges(charges)
-    {
-        size_t len=strlen(name)+1;
-        Name=new char[len];
-        strcpy(Name, name);
-    }
+    Account(int id, const char* name, int charges):acc_ID(id), Charges(charges)
+    {Name=new char[strlen(name)+1]; strcpy(Name, name);}
     
-    Account(Account& copy)
-    :acc_ID(copy.acc_ID), Charges(copy.Charges)
-    {
-        size_t len=strlen(copy.Name)+1;
-        Name=new char[len];
-        strcpy(Name, copy.Name);
-    }
-    void SetAcc_ID(int id) { acc_ID=id; }
-    void SetName(char* name) { Name=new char[strlen(name)+1]; strcpy(Name, name); }
-    void SetCharges(int charges) { Charges=charges; }
-    int GetAcc_ID() const { return acc_ID; }
-    char* GetName() const { return Name; }
-    int GetCharges() const { return Charges; }
-    virtual void SetRate(int per) { }
-    virtual void SetRank(int init) { }
-    virtual int GetRate() const { return 0; }
-    virtual int GetRank() const { return 0; }
+    Account(Account& copy):acc_ID(copy.acc_ID), Charges(copy.Charges)
+    {Name=new char[strlen(copy.Name)+1]; strcpy(Name, copy.Name);}
+    
+    void SetAcc_ID(int id) {acc_ID=id;}
+    void SetName(char* name) {Name=new char[strlen(name)+1]; strcpy(Name, name);}
+    void SetCharges(int charges) {Charges=charges;}
+    
+    int GetAcc_ID() const {return acc_ID;}
+    char* GetName() const {return Name;}
+    int GetCharges() const {return Charges;}
+    
+    virtual void SetRate(int per) {}
+    virtual void SetRank(int init) {}
+    virtual int GetRate() const {return 0;}
+    virtual int GetRank() const {return 0;}
 };
 
 
@@ -52,15 +42,14 @@ private:
     int rate;
 public:
     NormalAccount(int id, const char* name, int charges, int per)
-        : Account(id, name, charges), rate(per)
-    { }
-    virtual void SetRate(int per) { rate=per; }
-    virtual void SetRank(int init) { }
-    virtual int GetRate() const { return rate; }
-    virtual int GetRank() const { return 0; }
-
+    :Account(id, name, charges), rate(per){}
+    
+    virtual void SetRate(int per) {rate=per;}
+    virtual void SetRank(int init) {}
+    
+    virtual int GetRate() const {return rate;}
+    virtual int GetRank() const {return 0;}
 };
-
 
 class HighCreditAccount: public NormalAccount
 {
@@ -68,20 +57,11 @@ private:
     int rank;
 public:
     HighCreditAccount(int id, const char* name, int charges, int per, int init)
-    : NormalAccount(id, name, charges, per), rank(init)
-    { }
+    :NormalAccount(id, name, charges, per), rank(init){}
     
     virtual void SetRank(int init)
-    {
-        if(init==1)
-            rank=7;
-        else if(init==2)
-            rank=4;
-        else
-            rank=2;
-    }
-    virtual int GetRank() const { return rank; }
-
+    {if(init==1)rank=7; else if(init==2)rank=4; else rank=2;}
+    virtual int GetRank() const {return rank;}
 };
 
 class AccountHandler
@@ -90,8 +70,7 @@ public:
     Account* arr[10];
     int cnt;
     AccountHandler()
-        : cnt(0)
-    { }
+    :cnt(0){}
     
     void ShowMenu() const
     {
