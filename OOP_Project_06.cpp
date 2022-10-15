@@ -21,10 +21,7 @@ public:
     Account(Account& copy):acc_ID(copy.acc_ID), Charges(copy.Charges)
     {Name=new char[strlen(copy.Name)+1]; strcpy(Name, copy.Name);}
     
-    virtual ~Account()
-    {
-        delete []Name;
-    }
+    virtual ~Account(){delete []Name;}
     
     void SetAcc_ID(int id) {acc_ID=id;}
     void SetName(char* name) {Name=new char[strlen(name)+1]; strcpy(Name, name);}
