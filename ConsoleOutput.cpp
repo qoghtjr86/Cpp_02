@@ -1,31 +1,53 @@
 #include <iostream>
-using namespace std;
-
-class Point
+namespace mystd
 {
-private:
-    int xpos, ypos;
-public:
-    Point(int x=0, int y=0) : xpos(x), ypos(y)
-    { }
-    void ShowPosition() const
+    using namespace std;
+    
+    class ostream
     {
-        cout<<'['<<xpos<<", "<<ypos<<']'<<endl;
+        public:
+            void operator<< (const char* str)
+            {
+                printf("%s", str);
+            }
+            void operator<< (char str)
+            {
+                printf("%c", str);
+            }
+            void operator<< (int num)
+            {
+                printf("%d", num);
+            }
+            void operator<< (double e)
+            {
+                printf("%g", e);
+            }
+            void operator<< (ostream& (*fp)(ostream &ostm))
+            {
+                fp(*this);
+            }
+    };
+    
+    ostream& endl(ostream &ostm)
+    {
+        ostm<<'\n';
+        fflush(stdout);
+        return ostm;
     }
-    friend ostream& operator<<(ostream&, const Point&);
-};
 
-ostream& operator<<(ostream& os, const Point& pos)
-{
-    os<<'['<<pos.xpos<<", "<<pos.ypos<<']'<<endl;
-    return os;
+    ostream cout;
 }
 
 int main(void)
 {
-    Point pos1(1, 3);
-    cout<<pos1;
-    Point pos2(101, 103);
-    cout<<pos2;
+    using mystd::cout;
+    using mystd::endl;
+    
+    cout<<"Simple String";
+    cout<<endl;
+    cout<<3.14;
+    cout<<endl;
+    cout<<123;
+    endl(cout);
     return 0;
 }
