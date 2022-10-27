@@ -10,8 +10,9 @@ private:
     
 public:
     Account();
+    Account(int id, const char* name, int charges);
     Account(Account& copy);
-    virtual ~Account();
+    Account& operator=(Account &ref);
     
     void SetAcc_ID(int id);
     void SetName(char* name);
@@ -23,8 +24,9 @@ public:
     
     virtual void SetRate(int per);
     virtual void SetRank(int init);
-    virtual int GetRate() const;
-    virtual int GetRank() const;
+    virtual int GetRate();
+    virtual int GetRank();
+    
 };
 
 #endif /* Account_hpp */

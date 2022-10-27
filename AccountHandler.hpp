@@ -2,14 +2,17 @@
 #define AccountHandler_hpp
 
 #include "Account.hpp"
+#include "AccountArray.hpp"
 
-class AccountHandler
+class AccountHandler: public AccountArray
 {
 public:
-    Account* arr[10];
     int cnt;
     
     AccountHandler();
+    
+    Account& operator=(NormalAccount* ref);
+    Account& operator=(HighCreditAccount* ref);
 
     void ShowMenu() const;
     void ShowSubMenu() const;
@@ -17,7 +20,7 @@ public:
     void CreateCredit();
     void Deposit();
     void WithDraw();
-    void ShowInfo() const;
+    void ShowInfo();
     void Exit();
     void Error();
 };
