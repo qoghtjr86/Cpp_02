@@ -7,22 +7,19 @@
 class AccountHandler: public AccountArray
 {
 public:
-    int cnt;
+    //int cnt;
     
     AccountHandler();
     
-    Account& operator=(NormalAccount* ref);
-    Account& operator=(HighCreditAccount* ref);
-
     void ShowMenu() const;
     void ShowSubMenu() const;
     void CreateNormal();
     void CreateCredit();
     void Deposit();
     void WithDraw();
-    void ShowInfo();
+    void ShowInfo() const;
     void Exit();
-    void Error();
+    void Error() const;
 };
 
 #endif /* AccountHandler_hpp */

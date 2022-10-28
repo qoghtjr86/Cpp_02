@@ -4,7 +4,7 @@ AccountArray::AccountArray(){}
 
 AccountArray::AccountArray(int len):arrlen(len)
 {
-    arr=new Account[arrlen];
+    arr=new Account*[arrlen];
 }
 Account& AccountArray::operator[] (int idx)
 {
@@ -14,13 +14,15 @@ Account& AccountArray::operator[] (int idx)
         exit(1);
     }
     else
-        return arr[idx];
+        return *arr[idx];
 }
-AccountArray& AccountArray::operator=(AccountArray &ref)
+Account& AccountArray::operator[] (int idx) const
 {
-    this->SetAcc_ID(ref.GetAcc_ID());
-    this->SetName(ref.GetName());
-    this->SetCharges(ref.GetCharges());
-    this->SetRate(ref.GetRate());
-    return *this;
+    if(idx<0 || idx>=arrlen)
+    {
+        cout<<"Array index out of bound exception"<<endl;
+        exit(1);
+    }
+    else
+        return *arr[idx];
 }

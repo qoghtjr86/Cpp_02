@@ -12,21 +12,18 @@ public:
     Account();
     Account(int id, const char* name, int charges);
     Account(Account& copy);
-    Account& operator=(Account &ref);
     
     void SetAcc_ID(int id);
     void SetName(char* name);
     void SetCharges(int charges);
+    virtual void SetRate(int per);
+    virtual void SetRank(int init);
     
     int GetAcc_ID() const;
     char* GetName() const;
     int GetCharges() const;
-    
-    virtual void SetRate(int per);
-    virtual void SetRank(int init);
-    virtual int GetRate();
-    virtual int GetRank();
-    
+    virtual int GetRate() const;
+    virtual int GetRank() const;
 };
 
 #endif /* Account_hpp */
