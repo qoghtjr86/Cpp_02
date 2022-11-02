@@ -4,6 +4,7 @@
 #include "NormalAccount.hpp"
 #include "HighCreditAccount.hpp"
 #include "BankingCommonDecl.hpp"
+#include "String.hpp"
 
 int cnt=0;
 
@@ -36,7 +37,7 @@ void AccountHandler::CreateNormal()
     Account* na=new NormalAccount();
     cout<<"[보통예금계좌 개설]"<<endl;
     cout<<"계좌ID: ";cin>>id;na->SetAcc_ID(id);
-    cout<<"이 름: ";cin>>name;na->SetName(name);
+    cout<<"이 름: ";cin>>name;char* str=name;na->SetName(str);
     cout<<"입금액: ";cin>>charges;na->SetCharges(charges);
     cout<<"이자율: ";cin>>per;na->SetRate(per);
     cout<<"입금완료"<<endl;
@@ -54,7 +55,7 @@ void AccountHandler::CreateCredit()
     Account* hca=new HighCreditAccount();
     cout<<"[신용신뢰계좌 개설]"<<endl;
     cout<<"계좌ID: ";cin>>id;hca->SetAcc_ID(id);
-    cout<<"이 름: ";cin>>name;hca->SetName(name);
+    cout<<"이 름: ";cin>>name;char* str=name;hca->SetName(str);
     cout<<"입금액: ";cin>>charges;hca->SetCharges(charges);
     cout<<"이자율: ";cin>>per;hca->SetRate(per);
     cout<<"신용등급(1toA, 2toB, 3toC): ";cin>>init;hca->SetRank(init);
@@ -111,36 +112,21 @@ void AccountHandler::WithDraw()
     }
 }
 
-void AccountHandler::ShowInfo() const
+void AccountHandler::ShowInfo()
 {
     cout<<endl<<"[전체 계좌정보]"<<endl;
-    for(int i=0; i<10; i++)
+    for(int i=0; i<cnt; i++)
     {
-        if(arr[i]->GetAcc_ID()>0)
-        {
             cout<<"계좌ID: "<<arr[i]->GetAcc_ID()<<endl;
             cout<<"이 름: "<<arr[i]->GetName()<<endl;
             cout<<"잔 액: "<<arr[i]->GetCharges()<<endl;
             cout<<"이자율: "<<arr[i]->GetRate()<<endl;
             cout<<endl;
-        }
-        else
-            break;
     }
 }
 
 void AccountHandler::Exit()
 {
-    for(int i=0; i<10; i++)
-    {
-        if(arr[i]->GetAcc_ID()>0)
-        {
-            delete []arr[i]->GetName();
-            continue;
-        }
-        else
-            break;
-    }
     cout<<"프로그램을 종료합니다."<<endl;
 }
 

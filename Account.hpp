@@ -1,27 +1,31 @@
 #ifndef Account_hpp
 #define Account_hpp
 
-class Account
+#include "String.hpp"
+
+class Account: public String
 {
 private:
     int acc_ID;
-    char* Name;
+    String* Name;
     int Charges;
     
 public:
     Account();
-    Account(int id, const char* name, int charges);
+    Account(char* str, int id, String* name, int charges);
     Account(Account& copy);
     
-    void SetAcc_ID(int id);
-    void SetName(char* name);
-    void SetCharges(int charges);
+    virtual void SetStr(char* str);
+    virtual void SetAcc_ID(int id);
+    virtual void SetName(char* name);
+    virtual void SetCharges(int charges);
     virtual void SetRate(int per);
     virtual void SetRank(int init);
     
-    int GetAcc_ID() const;
-    char* GetName() const;
-    int GetCharges() const;
+    virtual char* GetStr() const;
+    virtual int GetAcc_ID() const;
+    virtual char* GetName() const;
+    virtual int GetCharges() const;
     virtual int GetRate() const;
     virtual int GetRank() const;
 };

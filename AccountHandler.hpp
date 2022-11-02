@@ -7,8 +7,7 @@
 class AccountHandler: public AccountArray
 {
 public:
-    //int cnt;
-    
+
     AccountHandler();
     
     void ShowMenu() const;
@@ -17,7 +16,7 @@ public:
     void CreateCredit();
     void Deposit();
     void WithDraw();
-    void ShowInfo() const;
+    void ShowInfo();
     void Exit();
     void Error() const;
 };

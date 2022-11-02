@@ -5,6 +5,8 @@ AccountArray::AccountArray(){}
 AccountArray::AccountArray(int len):arrlen(len)
 {
     arr=new Account*[arrlen];
+    for(int i=0;i<arrlen; i++)
+        arr[i]=nullptr;
 }
 Account& AccountArray::operator[] (int idx)
 {
