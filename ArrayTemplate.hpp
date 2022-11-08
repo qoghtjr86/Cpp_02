@@ -5,43 +5,32 @@
 #include <cstdlib>
 using namespace std;
 
-template <typename P>
-class BoundChechPointPtrArray
+template <typename T>
+class BoundCheckArray
 {
 private:
-    P* arr;
+    T* arr;
     int arrlen;
     
-    BoundChechPointPtrArray(const BoundChechPointPtrArray& arr) { }
-    BoundChechPointPtrArray& operator=(const BoundChechPointPtrArray& arr) { return *this; }
+    BoundCheckArray(const BoundCheckArray& arr) { }
+    BoundCheckArray& operator=(const BoundCheckArray& arr) { }
     
 public:
-    BoundChechPointPtrArray(int len);
-    P& operator[] (int idx);
-    P operator[] (int idx) const;
+    BoundCheckArray(int len);
+    T& operator[] (int idx);
+    T operator[] (int idx) const;
     int GetArrLen() const;
-    ~BoundChechPointPtrArray();
+    ~BoundCheckArray();
 };
 
-template <typename P>
-BoundChechPointPtrArray<P>::BoundChechPointPtrArray(int len) :arrlen(len)
+template <typename T>
+BoundCheckArray<T>::BoundCheckArray(int len) :arrlen(len)
 {
-    arr=new P[len];
+    arr=new T[len];
 }
 
-template <typename P>
-P& BoundChechPointPtrArray<P>::operator[] (int idx)
-{
-    if(idx<0 || idx>=arrlen)
-    {
-        cout<<"Array index out of bound exception"<<endl;
-        exit(1);
-    }
-    return arr[idx];
-}
-
-template <typename P>
-P BoundChechPointPtrArray<P>::operator[] (int idx) const
+template <typename T>
+T& BoundCheckArray<T>::operator[] (int idx)
 {
     if(idx<0 || idx>=arrlen)
     {
@@ -51,10 +40,21 @@ P BoundChechPointPtrArray<P>::operator[] (int idx) const
     return arr[idx];
 }
 
-template <typename P>
-int BoundChechPointPtrArray<P>::GetArrLen() const { return arrlen; }
+template <typename T>
+T BoundCheckArray<T>::operator[] (int idx) const
+{
+    if(idx<0 || idx>=arrlen)
+    {
+        cout<<"Array index out of bound exception"<<endl;
+        exit(1);
+    }
+    return arr[idx];
+}
 
-template <typename P>
-BoundChechPointPtrArray<P>::~BoundChechPointPtrArray() { delete []arr; }
+template <typename T>
+int BoundCheckArray<T>::GetArrLen() const { return arrlen; }
+
+template <typename T>
+BoundCheckArray<T>::~BoundCheckArray() { delete []arr; }
 
 #endif /* ArrayTemplate_hpp */
